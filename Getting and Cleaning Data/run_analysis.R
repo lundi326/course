@@ -1,36 +1,7 @@
-Skip to content
-Search or jump to…
-Pull requests
-Issues
-Marketplace
-Explore
- 
-@lundi326 
-tuanavu
-/
-Course
-Public
-Code
-Issues
-Pull requests
-Actions
-Projects
-Wiki
-Security
-Insights
-Course/Coursera/John Hopkins/Data Science/3. Getting and Cleaning Data/Lab/Couse Project/Solution/run_analysis.R
-@tuanavu
-tuanavu coursera
-…
-Latest commit 166c220 on May 20, 2015
- History
- 1 contributor
-109 lines (73 sloc)  4.4 KB
-
-#get the library for reading text files as data.frame
+# get the library for reading text files as data.frame
 library(data.table)
 
-#Start processing test data
+# Start processing test data
 
 # 1.  read in labels to be used later for adding description to variables and observations
 
@@ -43,10 +14,7 @@ names(activity_labels)<-c("Activity.Id","Activity")
 # 1.2 read in feture list
 feature_list<-read.table("UCI HAR Dataset/features.txt")
 
-
-#=========================================================================================
 # 2. Read In test data
-#=========================================================================================
 
 # 2.1 read in the file that contains id's of subjects per observation
 test_subjects<-read.table("UCI HAR Dataset/test/subject_test.txt")
@@ -75,10 +43,7 @@ sliced_testset <<- testset[,grepl("Subject.Id|Activity.Id|mean\\(\\)|std\\(\\)",
 # 2.6 Add descriptive activity names to the activities in the test data set
 final_testset<-merge(sliced_testset,activity_labels,all=TRUE)
 
-
-#=========================================================================================
 # 3. Read In training data
-#=========================================================================================
 
 # 3.1 read in the file that contains id's of subjects per observation
 train_subjects<-read.table("UCI HAR Dataset/train/subject_train.txt")
@@ -107,17 +72,13 @@ sliced_trainset <<- trainset[,grepl("Subject.Id|Activity.Id|mean\\(\\)|std\\(\\)
 # 3.6 Add descriptive activity names to the activities in the train data set
 final_trainset<-merge(sliced_trainset,activity_labels,all=TRUE)
 
-#=========================================================================================
 # 4. Merge test and train dataset
-#=========================================================================================
 
 data<-merge(final_testset,final_trainset,all=TRUE)
 
-#=========================================================================================
 # Produce a tidy dataset with the average of each variable for each activity and each subject
-#=========================================================================================
 
-#load the library for reshaping data\
+# load the library for reshaping data\
 library(reshape2)
 
 # First we melt the data set in order to produce a casted table on multiple columns later on.
@@ -126,28 +87,11 @@ library(reshape2)
 # take the column names which will be aggregated
 average_columns<-colnames(data[,3:68])
 
-#melt the data
+# melt the data
 melted_data<- melt(data,id=c("Subject.Id","Activity"),measure.vars=average_columns)
 
-#now cast the melted data set to produce the tidy dataset
+# now cast the melted data set to produce the tidy dataset
 tidy_dataset <- dcast(melted_data, Subject.Id + Activity ~ variable, mean)
 
-#=========================================================================================
-# Finally write the tidy dataset to the Data folder
-#=========================================================================================
+# output
 write.table(tidy_dataset, file = "tidydataset.txt", row.names= FALSE)
-Footer
-© 2022 GitHub, Inc.
-Footer navigation
-Terms
-Privacy
-Security
-Status
-Docs
-Contact GitHub
-Pricing
-API
-Training
-Blog
-About
-Course/run_analysis.R at master · tuanavu/Course
